@@ -8,7 +8,7 @@ import { GraduationCap } from "lucide-react";
 import type { Student } from "@/data/students";
 
 const Index = () => {
-  const [rollNumber, setRollNumber] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
   const [foundStudent, setFoundStudent] = useState<Student | null>(null);
@@ -18,14 +18,14 @@ const Index = () => {
     setError("");
     setFoundStudent(null);
 
-    if (!rollNumber || !selectedClass || !selectedSection) {
+    if (!studentId || !selectedClass || !selectedSection) {
       setError("Please fill in all fields.");
       return;
     }
 
     const student = students.find(
       (s) =>
-        s.rollNumber === rollNumber.trim() &&
+        s.studentId === studentId.trim() &&
         s.class === selectedClass &&
         s.section === selectedSection
     );
@@ -63,11 +63,11 @@ const Index = () => {
 
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-foreground mb-1 block">Roll Number</label>
+              <label className="text-sm font-medium text-foreground mb-1 block">Student ID</label>
               <Input
-                placeholder="e.g. 11101"
-                value={rollNumber}
-                onChange={(e) => setRollNumber(e.target.value)}
+                placeholder="e.g. 20140222901"
+                value={studentId}
+                onChange={(e) => setStudentId(e.target.value)}
               />
             </div>
 
