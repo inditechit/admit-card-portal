@@ -1,5 +1,8 @@
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
+import html2canvas from "html2canvas";
 import { Student, examSchedule } from "@/data/students";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 import schoolLogo from "@/assets/school-logo.png";
 
 interface AdmitCardProps {
@@ -9,8 +12,17 @@ interface AdmitCardProps {
 const AdmitCard = ({ student }: AdmitCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
+  const handleDownload = useCallback(async () => {
+    if (!cardRef.current) return;
+    const canvas = await html2canvas(cardRef.current, { scale: 2, backgroundColor: "#ffffff" });
+    const link = document.createElement("a");
+    link.download = `AdmitCard_${student.rollNumber}_${student.name}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  }, [student]);
+
   return (
-    <div className="flex justify-center px-4">
+    <div className="flex flex-col items-center gap-4 px-4">
       <div
         ref={cardRef}
         className="w-full max-w-[520px] bg-card border-2 border-primary rounded-lg p-8 admit-card-shadow"
@@ -19,10 +31,10 @@ const AdmitCard = ({ student }: AdmitCardProps) => {
         <div className="flex items-center gap-4 mb-2">
           <img src={schoolLogo} alt="School Logo" className="w-16 h-16 object-contain" />
           <div className="flex-1">
-            <h2 className="text-primary font-bold text-lg italic leading-tight" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-primary font-bold text-lg italic leading-tight">
               Govt. Sarvodaya Bal Vidyalaya
             </h2>
-            <p className="text-primary font-bold text-base" style={{ fontFamily: "var(--font-display)" }}>
+            <p className="text-primary font-bold text-base">
               Burari, Delhi - 84
             </p>
           </div>
@@ -81,6 +93,11 @@ const AdmitCard = ({ student }: AdmitCardProps) => {
           </ul>
         </div>
       </div>
+
+      <Button onClick={handleDownload} className="gap-2">
+        <Download className="w-4 h-4" />
+        Download Admit Card
+      </Button>
     </div>
   );
 };
